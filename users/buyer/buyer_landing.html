@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GeoState — Buyer Homepage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  :root {
+    --bg: #0a1a0c;
+    --bg2: #081008;
+    --surface: #0f1f10;
+    --surface2: #132614;
+    --surface3: #183019;
+    --border: #1e4020;
+    --border2: #275228;
+    --accent: #5db832;
+    --accent2: #74d43e;
+    --accent-dim: #3a7a18;
+    --accent-glow: rgba(93,184,50,0.18);
+    --gold: #c9a84c;
+    --gold2: #e8c870;
+    --text: #dff0d8;
+    --text-muted: #7ab068;
+    --text-dim: #3a5c3c;
+    --white: #f4f2ec;
+    --danger: #c84444;
+    --shadow: 0 8px 32px rgba(0,0,0,0.6);
+    --radius: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 18px;
+    --ff-display: 'Playfair Display', Georgia, serif;
+    --ff-caps: 'Cinzel', serif;
+    --ff-body: 'DM Sans', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+  body { font-family: var(--ff-body); background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+  .hidden { display: none !important; }
+
+  /* ══════════════ NAV ══════════════ */
+  nav {
+    position: sticky; top: 0; z-index: 200;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px; height: 60px;
+    background: rgba(10,26,12,0.97);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(30,64,32,0.7);
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px; cursor: pointer;
+    text-decoration: none; font-family: var(--ff-caps); font-weight: 500;
+    font-size: 19px; letter-spacing: 0.1em; color: var(--white);
+  }
+  .nav-logo-mark {
+    width: 34px; height: 34px; border-radius: 8px;
+    background: var(--accent); display: flex; align-items: center;
+    justify-content: center; font-family: var(--ff-caps); font-size: 15px;
+    font-weight: 700; color: var(--bg); letter-spacing: 0.05em; flex-shrink: 0;
+  }
+  .nav-logo span strong { color: var(--accent); font-weight: 600; }
+  .nav-right { display: flex; align-items: center; gap: 6px; }
+  .nav-icon-btn {
+    width: 40px; height: 40px; border-radius: 9px; border: none;
+    background: var(--surface2); color: var(--text-muted);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all .2s; font-size: 16px; position: relative;
+  }
+  .nav-icon-btn:hover { background: var(--surface3); color: var(--text); }
+  .notif-dot {
+    position: absolute; top: 8px; right: 9px;
+    width: 7px; height: 7px; background: var(--accent); border-radius: 50%;
+    border: 2px solid var(--bg);
+  }
+
+  /* ══════════════ DROPDOWN MENU ══════════════ */
+  .menu-overlay {
+    position: fixed; inset: 0; z-index: 300;
+    background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+  }
+  .menu-panel {
+    position: fixed; top: 0; right: 0; bottom: 0; z-index: 400;
+    width: min(340px, 92vw);
+    background: var(--surface);
+    border-left: 1px solid var(--border2);
+    box-shadow: -20px 0 60px rgba(0,0,0,0.7);
+    display: flex; flex-direction: column;
+    animation: slideInRight .22s ease;
+    overflow-y: auto;
+  }
+  @keyframes slideInRight { from { transform: translateX(100%); opacity:0; } to { transform: translateX(0); opacity:1; } }
+
+  .menu-user-header {
+    display: flex; align-items: center; gap: 14px;
+    padding: 24px 20px 20px;
+    background: linear-gradient(135deg, var(--accent) 0%, #3e8e1c 100%);
+    position: relative;
+  }
+  .menu-avatar {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.4);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; color: white; flex-shrink: 0;
+  }
+  .menu-user-info .menu-uname { font-weight: 600; font-size: 17px; color: white; font-family: var(--ff-display); }
+  .menu-user-info .menu-uemail { font-size: 12px; color: rgba(255,255,255,0.75); margin-top: 2px; }
+  .menu-close-btn {
+    position: absolute; top: 14px; right: 14px;
+    width: 30px; height: 30px; border-radius: 50%;
+    background: rgba(0,0,0,0.2); border: none; color: white;
+    cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center;
+  }
+
+  .menu-body { padding: 10px 10px; flex: 1; }
+  .menu-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 13px 14px; border-radius: 10px; cursor: pointer;
+    font-size: 14px; color: var(--text-muted); transition: all .15s;
+    border: none; background: none; width: 100%; text-align: left; font-family: var(--ff-body);
+    margin-bottom: 2px;
+  }
+  .menu-item:hover { background: var(--surface2); color: var(--text); }
+  .menu-item.active-item { background: rgba(93,184,50,0.1); color: var(--accent); }
+  .menu-item-left { display: flex; align-items: center; gap: 12px; }
+  .menu-item-icon {
+    width: 36px; height: 36px; border-radius: 9px;
+    background: var(--surface2); display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: var(--text-muted); flex-shrink: 0;
+  }
+  .menu-item.active-item .menu-item-icon { background: rgba(93,184,50,0.15); color: var(--accent); }
+  .menu-item-check { color: var(--accent); font-size: 14px; }
+  .menu-divider { height: 1px; background: var(--border); margin: 8px 4px; }
+  .menu-section-label {
+    font-family: var(--ff-caps); font-size: 10px; letter-spacing: 0.15em;
+    color: var(--text-dim); text-transform: uppercase; padding: 8px 14px 4px;
+  }
+  .role-submenu { background: var(--surface2); border-radius: 10px; overflow: hidden; margin: 2px 0; }
+  .role-submenu-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px; cursor: pointer; font-size: 13px; color: var(--text-muted);
+    transition: all .15s; border: none; background: none; width: 100%; text-align: left; font-family: var(--ff-body);
+  }
+  .role-submenu-item:hover { background: var(--surface3); color: var(--text); }
+  .role-submenu-item.active-role { color: var(--accent); background: rgba(93,184,50,0.08); }
+  .role-submenu-item-left { display: flex; align-items: center; gap: 10px; }
+  .role-icon-sm { width: 28px; height: 28px; border-radius: 7px; background: rgba(93,184,50,0.1); display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--accent); }
+  .menu-item.logout { color: #c84444; }
+  .menu-item.logout:hover { background: rgba(200,68,68,0.1); }
+  .menu-item.logout .menu-item-icon { background: rgba(200,68,68,0.1); color: var(--danger); }
+
+  /* ══════════════ HERO / PAGE HEADER ══════════════ */
+  .page-hero {
+    padding: 40px 20px 28px;
+    background: linear-gradient(170deg, rgba(10,26,12,1) 0%, rgba(15,31,16,1) 100%);
+    position: relative; overflow: hidden;
+  }
+  .hero-grid-bg {
+    position: absolute; inset: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(30,64,32,0.35) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(30,64,32,0.35) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 90% 100% at 50% 50%, black 20%, transparent 80%);
+  }
+  .hero-glow { position: absolute; top: -40px; left: 50%; transform: translateX(-50%); width: 500px; height: 300px; background: radial-gradient(ellipse, rgba(93,184,50,0.08) 0%, transparent 70%); pointer-events: none; }
+  .hero-inner { position: relative; z-index: 1; max-width: 700px; }
+  .hero-label {
+    display: inline-flex; align-items: center; gap: 8px; margin-bottom: 16px;
+    font-family: var(--ff-caps); font-size: 10px; letter-spacing: 0.2em; color: var(--accent);
+    text-transform: uppercase;
+    animation: fadeUp .5s ease both;
+  }
+  .hero-label-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+  .hero h1 {
+    font-family: var(--ff-display); font-weight: 700; font-size: clamp(28px, 6vw, 48px);
+    line-height: 1.1; color: var(--white); margin-bottom: 14px;
+    animation: fadeUp .5s .06s ease both;
+  }
+  .hero h1 .accent-line { color: var(--accent); font-style: italic; display: block; }
+  .hero-desc {
+    font-size: 13px; color: var(--text-muted); line-height: 1.8; max-width: 520px;
+    animation: fadeUp .5s .12s ease both;
+  }
+  @keyframes fadeUp { from { opacity:0; transform: translateY(16px); } to { opacity:1; transform: translateY(0); } }
+
+  /* ══════════════ SEARCH BAR ══════════════ */
+  .search-bar-wrap {
+    padding: 16px 20px 0; position: relative; z-index: 10;
+    animation: fadeUp .5s .18s ease both;
+  }
+  .search-input-row {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--surface); border: 1px solid var(--border2);
+    border-radius: 12px; padding: 10px 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+    transition: border-color .2s;
+  }
+  .search-input-row:focus-within { border-color: var(--accent-dim); }
+  .search-input-row i { color: var(--text-dim); font-size: 15px; flex-shrink: 0; }
+  .search-input-row input {
+    flex: 1; background: none; border: none; outline: none;
+    font-family: var(--ff-body); font-size: 14px; color: var(--text);
+  }
+  .search-input-row input::placeholder { color: var(--text-dim); }
+
+  /* ══════════════ FILTER PILLS ══════════════ */
+  .filters-wrap {
+    padding: 14px 20px 20px; display: flex; gap: 8px; flex-wrap: wrap;
+    animation: fadeUp .5s .22s ease both;
+  }
+  .filter-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 14px; border-radius: 100px; border: 1px solid var(--border2);
+    background: var(--surface); font-size: 12px; color: var(--text-muted);
+    cursor: pointer; transition: all .2s; font-family: var(--ff-body);
+    white-space: nowrap;
+  }
+  .filter-pill:hover { border-color: var(--accent-dim); color: var(--text); }
+  .filter-pill.active { background: var(--accent); border-color: var(--accent); color: var(--bg); font-weight: 600; }
+  .filter-pill i { font-size: 10px; }
+
+  /* ══════════════ RESULTS BAR ══════════════ */
+  .results-bar {
+    padding: 0 20px 14px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 13px; color: var(--text-muted);
+    animation: fadeUp .5s .26s ease both;
+  }
+  .results-count strong { color: var(--text); }
+
+  /* ══════════════ LISTINGS GRID ══════════════ */
+  .listings-wrap { padding: 0 16px 80px; }
+  .listings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+    gap: 16px;
+  }
+
+  /* ══════════════ PROPERTY CARD ══════════════ */
+  .prop-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-xl); overflow: hidden;
+    cursor: pointer; transition: all .28s;
+    animation: fadeUp .5s ease both;
+  }
+  .prop-card:hover {
+    border-color: rgba(93,184,50,0.45); transform: translateY(-5px);
+    box-shadow: 0 20px 56px rgba(0,0,0,0.7), 0 0 0 1px rgba(93,184,50,0.12);
+  }
+  .card-img {
+    height: 200px; position: relative; overflow: hidden;
+    background: var(--surface3);
+  }
+  .card-img img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform .55s ease; display: block;
+  }
+  .prop-card:hover .card-img img { transform: scale(1.05); }
+  .img-placeholder {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 10px;
+  }
+  .img-placeholder i { font-size: 38px; color: var(--accent); opacity: 0.15; }
+  .img-placeholder span { font-family: var(--ff-caps); font-size: 9px; letter-spacing: 0.2em; color: var(--text-dim); text-transform: uppercase; }
+
+  .card-badge-avail {
+    position: absolute; top: 12px; left: 12px;
+    background: var(--accent); color: var(--bg);
+    font-family: var(--ff-caps); font-size: 9px; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 4px 12px; border-radius: 100px;
+  }
+  .card-badge-avail.rent { background: var(--gold); }
+  .card-save {
+    position: absolute; top: 12px; right: 12px;
+    width: 34px; height: 34px; border-radius: 50%;
+    background: rgba(10,26,12,0.72); backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,0.12);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: rgba(255,255,255,0.5); font-size: 14px; transition: all .2s;
+  }
+  .card-save:hover { color: var(--gold); }
+  .card-save.saved { color: var(--gold); }
+
+  .card-body { padding: 18px 18px 16px; }
+  .card-title { font-family: var(--ff-display); font-size: 19px; font-weight: 600; color: var(--white); margin-bottom: 5px; line-height: 1.25; }
+  .card-addr { font-size: 12px; color: var(--text-muted); margin-bottom: 14px; display: flex; align-items: flex-start; gap: 6px; line-height: 1.5; }
+  .card-addr i { color: var(--accent); font-size: 11px; flex-shrink: 0; margin-top: 2px; }
+  .card-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid rgba(30,64,32,0.6); }
+  .card-meta-row { display: flex; align-items: center; justify-content: space-between; }
+  .meta-label { font-size: 11px; color: var(--text-dim); font-weight: 500; }
+  .meta-val { font-size: 11px; color: var(--text-muted); font-weight: 600; }
+  .card-footer { display: flex; align-items: flex-end; justify-content: space-between; }
+  .card-time { font-size: 11px; color: var(--text-dim); font-family: var(--ff-caps); letter-spacing: 0.06em; display: flex; align-items: center; gap: 5px; }
+  .card-time i { font-size: 10px; }
+  .card-price-wrap { text-align: right; }
+  .card-price { font-family: var(--ff-display); font-size: 22px; font-weight: 600; color: var(--accent); letter-spacing: -0.02em; line-height: 1; }
+  .card-price-suffix { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+  .card-status-pill {
+    display: inline-block; padding: 3px 11px; border-radius: 100px;
+    font-size: 10px; font-weight: 600; font-family: var(--ff-caps); letter-spacing: 0.1em;
+    margin-top: 4px;
+  }
+  .pill-sale { background: rgba(93,184,50,0.1); color: var(--accent); border: 1px solid rgba(93,184,50,0.25); }
+  .pill-rent { background: rgba(201,168,76,0.1); color: var(--gold); border: 1px solid rgba(201,168,76,0.3); }
+
+  /* ══════════════ PROPERTY DETAIL MODAL ══════════════ */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 500;
+    background: rgba(0,0,0,0.9); backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center; padding: 16px;
+    animation: fadeIn .2s ease;
+  }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+  .prop-modal {
+    background: var(--surface); border: 1px solid var(--border2);
+    border-radius: var(--radius-xl); width: 100%; max-width: 760px;
+    max-height: 92vh; overflow-y: auto; position: relative;
+    animation: scaleIn .22s ease;
+  }
+  @keyframes scaleIn { from { opacity:0; transform: scale(.95) translateY(10px); } to { opacity:1; transform: scale(1) translateY(0); } }
+  .modal-close {
+    position: absolute; top: 14px; right: 14px; z-index: 10;
+    width: 34px; height: 34px; border-radius: 50%;
+    background: rgba(10,26,12,0.8); border: 1px solid var(--border2);
+    color: var(--text-muted); cursor: pointer; font-size: 14px;
+    display: flex; align-items: center; justify-content: center; transition: all .15s;
+  }
+  .modal-close:hover { background: var(--surface3); color: var(--text); }
+  .modal-gallery {
+    height: 300px; position: relative; overflow: hidden; border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    background: var(--surface3);
+  }
+  .modal-gallery img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .modal-gallery-ph { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; }
+  .modal-gallery-ph i { font-size:48px; color:var(--accent); opacity:.12; }
+  .modal-gallery-ph span { font-family:var(--ff-caps); font-size:9px; letter-spacing:0.2em; color:var(--text-dim); text-transform:uppercase; }
+  .modal-info { padding: 28px 28px 32px; }
+  .modal-header { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:20px; }
+  .modal-type-badge { font-family:var(--ff-caps); font-size:9px; letter-spacing:0.18em; color:var(--text-dim); text-transform:uppercase; margin-bottom:7px; }
+  .modal-title { font-family:var(--ff-display); font-size:26px; font-weight:600; color:var(--white); line-height:1.2; }
+  .modal-addr { display:flex; align-items:center; gap:6px; color:var(--text-muted); font-size:13px; margin-top:8px; }
+  .modal-price-block { text-align:right; flex-shrink:0; }
+  .modal-price { font-family:var(--ff-display); font-size:28px; font-weight:600; color:var(--accent); white-space:nowrap; }
+  .modal-price-label { font-size:11px; color:var(--text-dim); margin-top:2px; font-family:var(--ff-caps); letter-spacing:0.08em; }
+  .modal-stats { display:grid; grid-template-columns:repeat(auto-fill, minmax(120px,1fr)); gap:10px; margin-bottom:24px; }
+  .modal-stat { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:14px 16px; }
+  .modal-stat-val { font-family:var(--ff-display); font-size:18px; font-weight:600; color:var(--white); }
+  .modal-stat-label { font-size:10px; color:var(--text-dim); margin-top:4px; font-family:var(--ff-caps); letter-spacing:0.1em; text-transform:uppercase; }
+  .modal-divider { height:1px; background:var(--border); margin:20px 0; }
+  .modal-section-title { font-family:var(--ff-caps); font-size:10px; letter-spacing:0.18em; color:var(--gold); text-transform:uppercase; margin-bottom:12px; }
+  .modal-desc { font-size:13px; color:var(--text-muted); line-height:1.9; }
+  .modal-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:24px; }
+  .btn {
+    padding:10px 22px; border-radius:8px; font-family:var(--ff-caps);
+    font-size:11px; letter-spacing:0.09em; text-transform:uppercase;
+    cursor:pointer; border:none; transition:all .2s;
+    display:inline-flex; align-items:center; gap:7px; font-weight:500;
+  }
+  .btn-primary { background:var(--accent); color:var(--bg); font-weight:700; }
+  .btn-primary:hover { background:var(--accent2); transform:translateY(-1px); }
+  .btn-gold { background:transparent; color:var(--gold); border:1px solid var(--gold-dim, #8a6e28); }
+  .btn-gold:hover { background:var(--gold); color:var(--bg); }
+  .btn-ghost { background:transparent; color:var(--text-muted); border:1px solid var(--border2); }
+  .btn-ghost:hover { color:var(--text); border-color:var(--accent-dim); background:var(--surface2); }
+
+  /* ══════════════ TOAST ══════════════ */
+  .toast-wrap { position:fixed; bottom:24px; right:20px; z-index:999; display:flex; flex-direction:column; gap:8px; }
+  .toast {
+    background:var(--surface); border:1px solid var(--border2);
+    border-radius:var(--radius); padding:12px 18px;
+    display:flex; align-items:center; gap:10px;
+    min-width:260px; max-width:320px;
+    box-shadow:var(--shadow); animation:toastIn .3s ease; font-size:13px;
+  }
+  @keyframes toastIn { from { opacity:0; transform:translateX(20px); } to { opacity:1; transform:translateX(0); } }
+  .toast.success { border-color:rgba(93,184,50,0.4); }
+  .toast.success .ti { color:var(--accent); }
+  .toast.error { border-color:rgba(200,68,68,0.4); }
+  .toast.error .ti { color:var(--danger); }
+
+  /* ══════════════ FOOTER ══════════════ */
+  .footer {
+    background: var(--bg2); border-top: 1px solid var(--border);
+    padding: 40px 20px 28px;
+  }
+  .footer-logo { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+  .footer-logo span { font-family:var(--ff-caps); font-size:18px; letter-spacing:0.1em; color:var(--white); }
+  .footer-logo span strong { color:var(--accent); }
+  .footer-desc { font-size:13px; color:var(--text-muted); line-height:1.8; margin-bottom:20px; max-width:400px; }
+  .footer-socials { display:flex; gap:10px; margin-bottom:32px; }
+  .social-btn {
+    width:36px; height:36px; border-radius:8px;
+    background:var(--surface); border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--text-muted); font-size:13px; cursor:pointer; transition:all .2s; text-decoration:none;
+  }
+  .social-btn:hover { background:var(--accent); border-color:var(--accent); color:var(--bg); }
+  .footer-contact-section h5 { font-family:var(--ff-caps); font-size:11px; letter-spacing:0.15em; color:var(--white); text-transform:uppercase; margin-bottom:14px; }
+  .footer-contact-item { display:flex; align-items:center; gap:10px; color:var(--text-muted); font-size:13px; margin-bottom:10px; }
+  .footer-contact-item i { color:var(--accent); font-size:12px; width:16px; }
+  .footer-bottom { margin-top:28px; padding-top:20px; border-top:1px solid var(--border); font-size:11px; color:var(--text-dim); font-family:var(--ff-caps); letter-spacing:0.06em; text-align:center; }
+
+  /* ══════════════ RESPONSIVE ══════════════ */
+  @media (max-width: 640px) {
+    .listings-grid { grid-template-columns: 1fr; }
+    .modal-overlay { align-items: flex-end; padding: 0; }
+    .prop-modal { border-radius: var(--radius-xl) var(--radius-xl) 0 0; max-height: 94vh; }
+    .modal-header { flex-direction: column; }
+    .modal-price-block { text-align: left; }
+    .modal-actions { flex-direction: column; }
+    .modal-actions .btn { justify-content: center; }
+    .toast-wrap { left: 16px; right: 16px; bottom: 16px; }
+    .toast { min-width: unset; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════ NAV ══════════ -->
+<nav>
+  <a class="nav-logo" href="#">
+    <div class="nav-logo-mark">G</div>
+    <span>Geo<strong>State</strong></span>
+  </a>
+  <div class="nav-right">
+    <button class="nav-icon-btn" onclick="showToast('No new notifications.','success')">
+      <i class="fa-regular fa-bell"></i>
+      <span class="notif-dot"></span>
+    </button>
+    <button class="nav-icon-btn" onclick="openMenu()">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+  </div>
+</nav>
+
+<!-- ══════════ MENU OVERLAY + PANEL ══════════ -->
+<div class="menu-overlay hidden" id="menu-overlay" onclick="closeMenu()"></div>
+<div class="menu-panel hidden" id="menu-panel">
+  <div class="menu-user-header">
+    <div class="menu-avatar"><i class="fa-solid fa-user"></i></div>
+    <div class="menu-user-info">
+      <div class="menu-uname">Your Name</div>
+      <div class="menu-uemail">youremailaddress@gmail.com</div>
+    </div>
+    <button class="menu-close-btn" onclick="closeMenu()"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="menu-body">
+    <button class="menu-item active-item" onclick="closeMenu()">
+      <div class="menu-item-left">
+        <div class="menu-item-icon"><i class="fa-solid fa-house"></i></div>
+        Homepage
+      </div>
+      <i class="fa-solid fa-check menu-item-check"></i>
+    </button>
+
+    <div class="menu-divider"></div>
+    <div class="menu-section-label">Switch Role</div>
+    <div class="role-submenu">
+      <button class="role-submenu-item active-role">
+        <div class="role-submenu-item-left">
+          <div class="role-icon-sm"><i class="fa-solid fa-house"></i></div>
+          Buyer Mode
+        </div>
+        <i class="fa-solid fa-check" style="color:var(--accent);font-size:12px"></i>
+      </button>
+      <button class="role-submenu-item" onclick="showToast('Apply as Seller coming soon.','success');closeMenu()">
+        <div class="role-submenu-item-left">
+          <div class="role-icon-sm" style="background:rgba(201,168,76,0.1);color:var(--gold)"><i class="fa-solid fa-tag"></i></div>
+          Apply as a Seller
+        </div>
+      </button>
+      <button class="role-submenu-item" onclick="showToast('Apply as Agent coming soon.','success');closeMenu()">
+        <div class="role-submenu-item-left">
+          <div class="role-icon-sm" style="background:rgba(100,180,255,0.1);color:#5aacf8"><i class="fa-solid fa-handshake"></i></div>
+          Apply as an Agent
+        </div>
+      </button>
+    </div>
+
+    <div class="menu-divider"></div>
+    <button class="menu-item" onclick="showSaved();closeMenu()">
+      <div class="menu-item-left">
+        <div class="menu-item-icon"><i class="fa-solid fa-heart"></i></div>
+        Saved Listings
+      </div>
+    </button>
+    <button class="menu-item" onclick="showToast('Map view coming soon.','success');closeMenu()">
+      <div class="menu-item-left">
+        <div class="menu-item-icon"><i class="fa-solid fa-map"></i></div>
+        Map
+      </div>
+    </button>
+    <button class="menu-item" onclick="showToast('Settings coming soon.','success');closeMenu()">
+      <div class="menu-item-left">
+        <div class="menu-item-icon"><i class="fa-solid fa-gear"></i></div>
+        Settings
+      </div>
+    </button>
+    <div class="menu-divider"></div>
+    <button class="menu-item logout" onclick="window.location.href='login/login.html'">
+      <div class="menu-item-left">
+        <div class="menu-item-icon"><i class="fa-solid fa-arrow-right-from-bracket"></i></div>
+        Logout
+      </div>
+    </button>
+  </div>
+</div>
+
+<!-- ══════════ HERO ══════════ -->
+<div class="page-hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-label"><span class="hero-label-dot"></span> Premier Real Estate · Batangas City</div>
+    <h1>Discover Your<span class="accent-line">Perfect Property</span></h1>
+    <p class="hero-desc">Discover properties with clarity and confidence. GeoState connects buyers, renters, and sellers through verified listings, leasing opportunities, geolocation mapping, and intelligent land-use insights across Batangas Province.</p>
+  </div>
+</div>
+
+<!-- ══════════ SEARCH ══════════ -->
+<div class="search-bar-wrap">
+  <div class="search-input-row">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="text" id="search-input" placeholder="Search" oninput="filterListings()">
+  </div>
+</div>
+
+<!-- ══════════ FILTERS ══════════ -->
+<div class="filters-wrap">
+  <button class="filter-pill active" data-filter="status" data-value="" onclick="setFilter('status','',this)">
+    For Sale <i class="fa-solid fa-chevron-down"></i>
+  </button>
+  <button class="filter-pill" data-filter="type" data-value="" onclick="cycleType(this)">
+    All Property Types <i class="fa-solid fa-chevron-down"></i>
+  </button>
+  <button class="filter-pill" data-filter="price" data-value="" onclick="cyclePrice(this)">
+    All Prices <i class="fa-solid fa-chevron-down"></i>
+  </button>
+  <button class="filter-pill" data-filter="location" data-value="" onclick="cycleLocation(this)">
+    Location <i class="fa-solid fa-chevron-down"></i>
+  </button>
+  <button class="filter-pill" data-filter="size" data-value="" onclick="cycleSize(this)">
+    Lot Size <i class="fa-solid fa-chevron-down"></i>
+  </button>
+</div>
+
+<!-- ══════════ RESULTS COUNT ══════════ -->
+<div class="results-bar">
+  <span class="results-count" id="results-count">Showing <strong>6</strong> Properties:</span>
+</div>
+
+<!-- ══════════ LISTINGS ══════════ -->
+<div class="listings-wrap">
+  <div class="listings-grid" id="listings-grid"></div>
+  <p id="no-results" class="hidden" style="text-align:center;padding:60px 0;color:var(--text-dim);font-family:var(--ff-display);font-size:20px;font-style:italic">No properties found. Try adjusting your filters.</p>
+</div>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer class="footer">
+  <div class="footer-logo">
+    <div class="nav-logo-mark" style="width:32px;height:32px;font-size:13px">G</div>
+    <span>Geo<strong>State</strong></span>
+  </div>
+  <p class="footer-desc">Next-generation real estate platform where you can browse properties, explore locations, and find the perfect place with ease.</p>
+  <div class="footer-socials">
+    <a class="social-btn" href="#"><i class="fa-brands fa-facebook-f"></i></a>
+    <a class="social-btn" href="#"><i class="fa-brands fa-x-twitter"></i></a>
+    <a class="social-btn" href="#"><i class="fa-brands fa-instagram"></i></a>
+  </div>
+  <div class="footer-contact-section">
+    <h5>Contact Us</h5>
+    <div class="footer-contact-item"><i class="fa-solid fa-envelope"></i> info@geostate.com</div>
+    <div class="footer-contact-item"><i class="fa-solid fa-phone"></i> +63 912 345 6789</div>
+    <div class="footer-contact-item"><i class="fa-solid fa-location-dot"></i> Batangas, Philippines</div>
+  </div>
+  <div class="footer-bottom">© 2026 GeoState. All rights reserved.</div>
+</footer>
+
+<!-- ══════════ PROPERTY DETAIL MODAL ══════════ -->
+<div class="modal-overlay hidden" id="modal-prop" onclick="closePropBg(event)">
+  <div class="prop-modal">
+    <button class="modal-close" onclick="closeProp()"><i class="fa-solid fa-xmark"></i></button>
+    <div class="modal-gallery" id="modal-gallery">
+      <div class="modal-gallery-ph" id="modal-gallery-ph">
+        <i class="fa-solid fa-building" id="modal-gallery-icon"></i>
+        <span>No Images Available</span>
+      </div>
+      <img id="modal-gallery-img" src="" alt="" style="display:none">
+    </div>
+    <div class="modal-info">
+      <div class="modal-header">
+        <div>
+          <div class="modal-type-badge" id="modal-type">—</div>
+          <div class="modal-title" id="modal-title">—</div>
+          <div class="modal-addr"><i class="fa-solid fa-location-dot" style="color:var(--accent);font-size:11px"></i><span id="modal-addr">—</span></div>
+        </div>
+        <div class="modal-price-block">
+          <div class="modal-price" id="modal-price">—</div>
+          <div class="modal-price-label" id="modal-price-label"></div>
+          <div style="margin-top:8px"><span class="card-status-pill" id="modal-status-pill">—</span></div>
+        </div>
+      </div>
+      <div class="modal-stats" id="modal-stats"></div>
+      <div class="modal-divider"></div>
+      <div class="modal-section-title">About This Property</div>
+      <div class="modal-desc" id="modal-desc">—</div>
+      <div class="modal-actions">
+        <button class="btn btn-primary"><i class="fa-solid fa-phone"></i> Call Owner</button>
+        <button class="btn btn-gold"><i class="fa-brands fa-facebook-f"></i> Message on Facebook</button>
+        <button class="btn btn-ghost"><i class="fa-solid fa-envelope"></i> Email Inquiry</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ TOAST ══════════ -->
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script>
+  // ─── DATA ───────────────────────────────────
+  const SAMPLE = 'assets/img/sample.jpg';
+
+  const LISTINGS = [
+    {
+      id:'l1', title:'Suburban Family Home', addr:'45 Rizal Avenue, Sabang, Lipa City',
+      type:'House', status:'For Sale', price:7000000, sqm:120, lotSqm:150, daysAgo:2,
+      icon:'fa-house', images:[SAMPLE,SAMPLE,SAMPLE],
+      desc:'Elegant four-bedroom family home in the quiet residential area of Sabang. Features a large living room, dining area, modern kitchen, two covered parking spaces, and a landscaped garden. Near Batangas City Hospital and SM City Batangas.'
+    },
+    {
+      id:'l2', title:'2-Bedroom Apartment', addr:'123 Rizal Street, Lipa City',
+      type:'Apartment', status:'For Sale', price:2800000, sqm:65, lotSqm:null, daysAgo:3,
+      icon:'fa-building', images:[SAMPLE,SAMPLE],
+      desc:'A bright and modern two-bedroom apartment in a prime Lipa City location. Open-plan living and dining area, well-equipped kitchen, and two full bathrooms. Walking distance to restaurants, schools, and public transport.'
+    },
+    {
+      id:'l3', title:'Condominium Unit', addr:'023 San Jose, Lipa City',
+      type:'Condo', status:'For Rent', price:12000, priceUnit:'/month', sqm:32, lotSqm:null, daysAgo:3,
+      icon:'fa-building-columns', images:[SAMPLE,SAMPLE,SAMPLE],
+      desc:'A fully-furnished condominium unit in the heart of Lipa City. Features modern amenities, 24/7 security, and stunning city views. Ideal for young professionals and small families.'
+    },
+    {
+      id:'l4', title:'Warehouse', addr:'200 Industrial Road, Santo Tomas',
+      type:'Industrial', status:'For Rent', price:80000, priceUnit:'/month', sqm:500, lotSqm:null, daysAgo:5,
+      icon:'fa-warehouse', images:[SAMPLE,SAMPLE],
+      desc:'Spacious warehouse with high ceiling clearance, wide loading bay, and secure perimeter fencing. Located along the main industrial road with easy access to the national highway. Available for immediate occupancy.'
+    },
+    {
+      id:'l5', title:'3-Bedroom Townhouse', addr:'45 Sunflower Street, Lipa City',
+      type:'Townhouse', status:'For Sale', price:3600000, sqm:85, lotSqm:null, daysAgo:6,
+      icon:'fa-house-chimney', images:[SAMPLE,SAMPLE],
+      desc:'A beautifully designed three-bedroom townhouse in a peaceful neighborhood. Complete with a modern kitchen, tiled bathrooms, garage, and a small garden area. Walking distance to schools and public markets.'
+    },
+    {
+      id:'l6', title:'Agricultural Land', addr:'123 Farm Rd, Banaybanay, Lipa City',
+      type:'Land', status:'For Sale', price:5500000, sqm:5000, lotSqm:null, daysAgo:7,
+      icon:'fa-seedling', images:[SAMPLE,SAMPLE],
+      desc:'Prime agricultural lot in Banaybanay. Flat terrain suitable for farming, subdivision development, or commercial use. With frontage road access and nearby utilities. Transfer of title included.'
+    },
+  ];
+
+  let saved = JSON.parse(localStorage.getItem('gs_saved')||'[]');
+  let filterStatus = '';
+  let filterType = '';
+  let searchQ = '';
+
+  // ─── RENDER ─────────────────────────────────
+  function fmtPrice(price, unit) {
+    let s;
+    if (price >= 1000000) s = '₱' + (price/1000000).toFixed(price%1000000===0?0:2) + 'M';
+    else if (price >= 1000) s = '₱' + (price/1000).toFixed(0) + 'K';
+    else s = '₱' + price.toLocaleString();
+    return s + (unit||'');
+  }
+
+  function renderListings() {
+    let list = LISTINGS.slice();
+    if (filterStatus) list = list.filter(l => l.status === filterStatus);
+    if (filterType) list = list.filter(l => l.type === filterType);
+    if (searchQ) {
+      const q = searchQ.toLowerCase();
+      list = list.filter(l => l.title.toLowerCase().includes(q) || l.addr.toLowerCase().includes(q) || l.type.toLowerCase().includes(q));
+    }
+
+    const grid = document.getElementById('listings-grid');
+    const noRes = document.getElementById('no-results');
+    const countEl = document.getElementById('results-count');
+    countEl.innerHTML = `Showing <strong>${list.length}</strong> Properties:`;
+
+    if (!list.length) {
+      grid.innerHTML = '';
+      noRes.classList.remove('hidden');
+      return;
+    }
+    noRes.classList.add('hidden');
+    grid.innerHTML = list.map((l, idx) => {
+      const isSaved = saved.includes(l.id);
+      const isRent = l.status === 'For Rent';
+      const hasImg = l.images && l.images.length > 0;
+      return `
+      <div class="prop-card" style="animation-delay:${idx*0.06}s" onclick="openProp('${l.id}')">
+        <div class="card-img">
+          ${hasImg
+            ? `<img src="${l.images[0]}" alt="${l.title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+            : ''}
+          <div class="img-placeholder" style="display:${hasImg?'none':'flex'}">
+            <i class="fa-solid ${l.icon}"></i>
+            <span>View Details</span>
+          </div>
+          <span class="card-badge-avail ${isRent?'rent':''}">Available</span>
+          <button class="card-save ${isSaved?'saved':''}" onclick="event.stopPropagation();toggleSave('${l.id}',this)" title="Save">
+            <i class="fa-${isSaved?'solid':'regular'} fa-heart"></i>
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="card-title">${l.title}</div>
+          <div class="card-addr"><i class="fa-solid fa-location-dot"></i>${l.addr}</div>
+          <div class="card-meta">
+            <div class="card-meta-row"><span class="meta-label">Size:</span><span class="meta-val">${l.sqm.toLocaleString()} sqm${l.lotSqm?' / '+l.lotSqm+' sqm floor':''}</span></div>
+            <div class="card-meta-row"><span class="meta-label">Property Type:</span><span class="meta-val">${l.type}</span></div>
+          </div>
+          <div class="card-footer">
+            <div class="card-time"><i class="fa-regular fa-clock"></i> ${l.daysAgo} Days Ago</div>
+            <div class="card-price-wrap">
+              <div class="card-price" style="color:${isRent?'var(--gold)':'var(--accent)'}">${fmtPrice(l.price, l.priceUnit)}</div>
+              <div style="display:flex;justify-content:flex-end;margin-top:4px">
+                <span class="card-status-pill ${isRent?'pill-rent':'pill-sale'}">${l.status.toUpperCase()}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // ─── SAVE ────────────────────────────────────
+  function toggleSave(id, btn) {
+    if (saved.includes(id)) {
+      saved = saved.filter(s => s !== id);
+      btn.innerHTML = '<i class="fa-regular fa-heart"></i>';
+      btn.classList.remove('saved');
+      showToast('Removed from saved listings.', 'success');
+    } else {
+      saved.push(id);
+      btn.innerHTML = '<i class="fa-solid fa-heart"></i>';
+      btn.classList.add('saved');
+      showToast('Saved to your collection!', 'success');
+    }
+    localStorage.setItem('gs_saved', JSON.stringify(saved));
+  }
+
+  function showSaved() {
+    const s = LISTINGS.filter(l => saved.includes(l.id));
+    if (!s.length) { showToast('No saved listings yet.', 'error'); return; }
+    showToast(`You have ${s.length} saved listing${s.length>1?'s':''}.`, 'success');
+  }
+
+  // ─── FILTERS ─────────────────────────────────
+  function setFilter(key, val, el) {
+    if (key === 'status') filterStatus = val;
+    if (key === 'type') filterType = val;
+    document.querySelectorAll(`[data-filter="${key}"]`).forEach(p => p.classList.remove('active'));
+    if (el) el.classList.add('active');
+    renderListings();
+  }
+
+  const typeOptions = ['', 'House', 'Apartment', 'Condo', 'Townhouse', 'Land', 'Industrial', 'Warehouse'];
+  const typeLabels  = ['All Property Types', 'House', 'Apartment', 'Condo', 'Townhouse', 'Land', 'Industrial', 'Warehouse'];
+  let typeIdx = 0;
+  function cycleType(el) {
+    typeIdx = (typeIdx + 1) % typeOptions.length;
+    filterType = typeOptions[typeIdx];
+    el.innerHTML = `${typeLabels[typeIdx]} <i class="fa-solid fa-chevron-down"></i>`;
+    filterType ? el.classList.add('active') : el.classList.remove('active');
+    renderListings();
+  }
+
+  function cyclePrice(el) { showToast('Price filter coming soon.', 'success'); }
+  function cycleLocation(el) { showToast('Location filter coming soon.', 'success'); }
+  function cycleSize(el) { showToast('Lot size filter coming soon.', 'success'); }
+
+  function filterListings() {
+    searchQ = document.getElementById('search-input').value;
+    renderListings();
+  }
+
+  // ─── PROPERTY MODAL ──────────────────────────
+  function openProp(id) {
+    const l = LISTINGS.find(x => x.id === id);
+    if (!l) return;
+    const isRent = l.status === 'For Rent';
+    document.getElementById('modal-type').textContent = l.type;
+    document.getElementById('modal-title').textContent = l.title;
+    document.getElementById('modal-addr').textContent = l.addr;
+    document.getElementById('modal-price').innerHTML = fmtPrice(l.price, l.priceUnit);
+    document.getElementById('modal-price-label').textContent = isRent ? 'Per Month' : 'Asking Price';
+    const sp = document.getElementById('modal-status-pill');
+    sp.textContent = l.status; sp.className = 'card-status-pill ' + (isRent ? 'pill-rent' : 'pill-sale');
+
+    let statsHTML = `<div class="modal-stat"><div class="modal-stat-val">${l.sqm.toLocaleString()}</div><div class="modal-stat-label">Floor Area (sqm)</div></div>`;
+    if (l.lotSqm) statsHTML += `<div class="modal-stat"><div class="modal-stat-val">${l.lotSqm.toLocaleString()}</div><div class="modal-stat-label">Lot Area (sqm)</div></div>`;
+    statsHTML += `<div class="modal-stat"><div class="modal-stat-val">${l.daysAgo}d</div><div class="modal-stat-label">Days Listed</div></div>`;
+    document.getElementById('modal-stats').innerHTML = statsHTML;
+    document.getElementById('modal-desc').textContent = l.desc || 'No description provided.';
+
+    const ph = document.getElementById('modal-gallery-ph');
+    const img = document.getElementById('modal-gallery-img');
+    const iconEl = document.getElementById('modal-gallery-icon');
+    iconEl.className = `fa-solid ${l.icon}`;
+    if (l.images && l.images.length) {
+      ph.style.display = 'none';
+      img.style.display = 'block';
+      img.src = l.images[0];
+      img.onerror = () => { img.style.display='none'; ph.style.display='flex'; };
+    } else {
+      ph.style.display = 'flex';
+      img.style.display = 'none';
+    }
+    document.getElementById('modal-prop').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeProp() { document.getElementById('modal-prop').classList.add('hidden'); document.body.style.overflow = ''; }
+  function closePropBg(e) { if (e.target.id === 'modal-prop') closeProp(); }
+
+  // ─── MENU ────────────────────────────────────
+  function openMenu() {
+    document.getElementById('menu-overlay').classList.remove('hidden');
+    document.getElementById('menu-panel').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu() {
+    document.getElementById('menu-overlay').classList.add('hidden');
+    document.getElementById('menu-panel').classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+
+  // ─── TOAST ───────────────────────────────────
+  function showToast(msg, type='success') {
+    const wrap = document.getElementById('toast-wrap');
+    const t = document.createElement('div');
+    t.className = `toast ${type}`;
+    t.innerHTML = `<i class="fa-solid ${type==='success'?'fa-circle-check':'fa-circle-xmark'} ti"></i><span>${msg}</span>`;
+    wrap.appendChild(t);
+    setTimeout(() => { t.style.opacity='0'; t.style.transform='translateX(20px)'; t.style.transition='all .3s'; setTimeout(()=>t.remove(),300); }, 3000);
+  }
+
+  // ─── INIT ─────────────────────────────────────
+  renderListings();
+</script>
+</body>
+</html>
